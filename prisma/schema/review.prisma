@@ -1,5 +1,5 @@
 model Review {
-  id        String  @id @default(cuid())
+  id        String  @id @default(uuid())
   rating    Int
   comment   String?
 
@@ -9,5 +9,8 @@ model Review {
   gearId    String
   gear      GearItem @relation(fields: [gearId], references: [id])
 
-  createdAt DateTime @default(now())
+   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("reviews")
 }
