@@ -1,0 +1,13 @@
+model Payment {
+  id            String         @id @default(cuid())
+  transactionId String?
+  amount        Float
+  method        PaymentMethod
+  status        PaymentStatus @default(PENDING)
+
+  orderId       String  @unique
+  order         Order   @relation(fields: [orderId], references: [id])
+
+  paidAt        DateTime?
+  createdAt     DateTime @default(now())
+}

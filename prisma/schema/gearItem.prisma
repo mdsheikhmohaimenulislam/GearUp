@@ -1,0 +1,22 @@
+model GearItem {
+  id          String   @id @default(cuid())
+  name        String
+  brand       String?
+  description String?
+  pricePerDay Float
+  stock       Int
+  image       String?
+  condition   String?
+  isAvailable Boolean @default(true)
+
+  providerId  String
+  provider    User     @relation("ProviderGear", fields: [providerId], references: [id])
+
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+
+  orders      Order[]
+  reviews     Review[]
+
+  createdAt DateTime @default(now())
+}
