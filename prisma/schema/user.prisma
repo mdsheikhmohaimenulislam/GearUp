@@ -1,19 +1,22 @@
 model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  password  String
-  phone     String?
-  address   String?
-  role      Role     @default(CUSTOMER)
-  isActive  Boolean  @default(true)
-
-  gearItems GearItem[] @relation("ProviderGear")
-  orders    Order[]    @relation("CustomerOrders")
-  reviews   Review[]
+  id           String     @id @default(uuid())
+  name         String
+  email        String     @unique
+  passwordHash String
+  phone        String?
+  role         Role       @default(CUSTOMER)
+  status       UserStatus @default(ACTIVE)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+
+  gearItems GearItem[] @relation("ProviderGear")
+
+  orders Order[] @relation("CustomerRentals")
+
+  reviews Review[] @relation("CustomerReviews")
+
 
   @@map("users")
 }

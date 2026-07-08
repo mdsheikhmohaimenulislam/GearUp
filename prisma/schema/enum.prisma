@@ -22,3 +22,41 @@ enum PaymentStatus {
 enum PaymentMethod {
   STRIPE
 }
+
+enum Rating {
+  ONE
+  TWO
+  THREE
+  FOUR
+  FIVE
+}
+
+enum GearAvailability {
+  AVAILABLE
+  RENTED
+  OUT_OF_STOCK
+  MAINTENANCE
+}
+
+enum ActiveStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+
+
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+enum RentalStatus {
+  PLACED
+  CONFIRMED
+  CANCELLED
+  PAID
+  PICKED_UP
+  RETURNED
+}
+

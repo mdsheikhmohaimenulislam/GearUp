@@ -3,19 +3,23 @@ model Order {
   quantity    Int
   startDate   DateTime
   endDate     DateTime
-  totalPrice  Float
-
+  totalPrice  Decimal     @db.Decimal(10,2)
   status      OrderStatus @default(PLACED)
 
-  customerId  String
-  customer    User        @relation("CustomerOrders", fields: [customerId], references: [id])
+  customerId String
+  customer   User @relation("CustomerRentals", fields: [customerId], references: [id])
 
-  gearId      String
-  gear        GearItem    @relation(fields: [gearId], references: [id])
+  gearId String
+  gear   GearItem @relation(fields: [gearId], references: [id])
 
-  payment     Payment?
 
-    createdAt DateTime @default(now())
+
+  review Review[]
+
+  rentalItems RentalItem[]   // <-- add this
+  payment Payment[]
+
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("orders")
