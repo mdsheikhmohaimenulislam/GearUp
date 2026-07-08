@@ -5,6 +5,8 @@ import cors from "cors";
 import { authRouter } from "./modules/auth/auth.route";
 import { notFound } from "./middleWares/notFound";
 import { globalErrorHandling } from "./middleWares/globalErrorHandler";
+import { providerRoutes } from "./modules/provider/provider.routes";
+import { categoryRouter } from "./modules/category/category.route";
 
 
 const app: Application = express();
@@ -31,7 +33,8 @@ app.get("/", (req: Request, res: Response) => {
 
 
 app.use("/api/auth", authRouter);
-
+app.use("/api/provider", providerRoutes)
+app.use("/api", categoryRouter)
 
 
 app.use(notFound);
