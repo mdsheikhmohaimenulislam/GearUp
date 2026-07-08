@@ -6,11 +6,12 @@ import { ILoginUser, RegisterPayload } from "./auth.interface";
 
 
 
+
 const registerUserIntoDB = async (payload: RegisterPayload) => {
-  const { name, email, password, profilePhoto,phone,address } = payload;
+  const { name, email, password,phone,address,role } = payload;
 
   const ifUserExist = await prisma.user.findUnique({
-    where: { email,phone },
+    where: { email},
   });
 
   if (ifUserExist) {
@@ -28,12 +29,8 @@ const registerUserIntoDB = async (payload: RegisterPayload) => {
       email,
       phone,
       address,
+      role,
       password: hashesPassword,
-      profile: {
-        create: {
-          profilePhoto,
-        },
-      },
     },
   });
 

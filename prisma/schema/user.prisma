@@ -13,7 +13,6 @@ model User {
 
 
   gearItems GearItem[] @relation("ProviderGear")
-  profile  Profile[]
   orders Order[] @relation("CustomerRentals")
 
   reviews Review[] @relation("CustomerReviews")
