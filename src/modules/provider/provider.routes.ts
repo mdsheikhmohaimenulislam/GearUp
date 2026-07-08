@@ -1,21 +1,14 @@
-const express = require("express");
-const {
-  addGear,
-  updateGear,
-  deleteGear,
-  getProviderOrders,
-  updateOrderStatus,
-} = require("../controllers/providerController");
-const { protect, authorize } = require("../middleware/auth");
+import { Router } from "express";
 
-const router = express.Router();
 
-router.use(protect, authorize("PROVIDER"));
+const router = Router();
 
-router.post("/gear", addGear);
-router.put("/gear/:id", updateGear);
-router.delete("/gear/:id", deleteGear);
-router.get("/orders", getProviderOrders);
-router.patch("/orders/:id", updateOrderStatus);
+router.use();
 
-module.exports = router;
+router.post("/gear", );
+router.put("/gear/:id", );
+router.delete("/gear/:id", );
+router.get("/orders", );
+router.patch("/orders/:id", );
+
+export const providerRouter = router

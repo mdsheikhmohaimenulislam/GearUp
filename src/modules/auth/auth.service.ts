@@ -1,9 +1,59 @@
 import bcrypt from "bcryptjs";
-import { JwtPayload } from "jsonwebtoken";
 import config from "../../config";
 import { prisma } from "../../lib/prisma";
 import { jwtUtils } from "../../utils/jwt";
-import { ILoginUser } from "./auth.interface";
+import { ILoginUser, RegisterPayload } from "./auth.interface";
+
+
+
+const registerUserIntoDB = async (payload: RegisterPayload) => {
+  const { name, email, password, profilePhoto,phone,address } = payload;
+
+  const ifUserExist = await prisma.user.findUnique({
+    where: { email,phone },
+  });
+
+  if (ifUserExist) {
+    throw new Error("User with this email already Exists");
+  }
+
+  const hashesPassword = await bcrypt.hash(
+    password,
+    Number(config.bcrypt_salt_rounds),
+  );
+
+  const createdUser = await prisma.user.create({
+    data: {
+      name,
+      email,
+      phone,
+      address,
+      password: hashesPassword,
+      profile: {
+        create: {
+          profilePhoto,
+        },
+      },
+    },
+  });
+
+ 
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: createdUser.id,
+      email: createdUser.email || email,
+    },
+
+    omit: { password: true },
+
+  });
+
+  return user;
+};
+
+
+
 
 const loginUser = async (payload: ILoginUser) => {
   const { email, password } = payload;
@@ -14,7 +64,7 @@ const loginUser = async (payload: ILoginUser) => {
     },
   });
 
-  if (user.activeStatus === "SUSPENDED") {
+  if (user.status === "SUSPENDED") {
     throw new Error("Your account has been suspended. Please contact support.");
   }
 
@@ -49,47 +99,8 @@ const loginUser = async (payload: ILoginUser) => {
   };
 };
 
-const refreshToken = async (refreshToken: string) => {
-  const verifiedRefreshToken = jwtUtils.verifyToken(
-    refreshToken,
-    config.jwt_refresh_secret
-  );
-
-  if (!verifiedRefreshToken.success) {
-    throw new Error(verifiedRefreshToken.error);
-  }
-
-  const { id } = verifiedRefreshToken.data as JwtPayload;
-
-  const user = await prisma.user.findUniqueOrThrow({
-    where: {
-      id,
-    },
-  });
-
-  if (user.activeStatus === "SUSPENDED") {
-    throw new Error("Your account has been suspended.");
-  }
-
-  const jwtPayload = {
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    role: user.role,
-  };
-
-  const accessToken = jwtUtils.createToken(
-    jwtPayload,
-    config.jwt_access_secret,
-    config.jwt_access_expires_in
-  );
-
-  return {
-    accessToken,
-  };
-};
 
 export const authService = {
   loginUser,
-  refreshToken,
+registerUserIntoDB
 };

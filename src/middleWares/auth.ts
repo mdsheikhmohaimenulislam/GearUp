@@ -59,7 +59,7 @@ export const auth = (...requiredRoles: Role[]) => {
       throw new Error("User not found. please log in again");
     }
 
-    if (user.activeStatus === "SUSPENDED") {
+    if (user.status === "SUSPENDED") {
       throw new Error(
         "Your account has been suspended. Please contact support.",
       );

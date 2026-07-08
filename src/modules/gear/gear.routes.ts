@@ -1,10 +1,11 @@
-const express = require("express");
-const { getAllGear, getGearById, getCategories } = require("../controllers/gearController");
+import { Router } from "express";
 
-const router = express.Router();
 
-router.get("/gear", getAllGear);
-router.get("/gear/:id", getGearById);
-router.get("/categories", getCategories);
 
-module.exports = router;
+const router = Router();
+
+router.get("/gear", );
+router.get("/gear/:id", );
+router.get("/categories", );
+
+export const gearRouter = router

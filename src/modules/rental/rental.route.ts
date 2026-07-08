@@ -1,13 +1,12 @@
-const express = require("express");
-const { createRental, getMyRentals, getRentalById } = require("../controllers/rentalController");
-const { protect, authorize } = require("../middleware/auth");
+import { Router } from "express";
 
-const router = express.Router();
 
-router.use(protect);
+const router = Router();
 
-router.post("/", authorize("CUSTOMER"), createRental);
-router.get("/", authorize("CUSTOMER"), getMyRentals);
-router.get("/:id", getRentalById); // ownership/admin check happens inside controller
+router.use();
 
-module.exports = router;
+router.post("/", );
+router.get("/", );
+router.get("/:id", ); // ownership/admin check happens inside controller
+
+export const rentalRouter = router

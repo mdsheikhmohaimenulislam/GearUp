@@ -1,9 +1,9 @@
-const express = require("express");
-const { createReview } = require("../controllers/reviewController");
-const { protect, authorize } = require("../middleware/auth");
+import { Router } from "express";
 
-const router = express.Router();
 
-router.post("/", protect, authorize("CUSTOMER"), createReview);
+const router =Router();
 
-module.exports = router;
+router.post("/",);
+
+
+export const reviewRouter = router
