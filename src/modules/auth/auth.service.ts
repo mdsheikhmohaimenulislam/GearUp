@@ -97,7 +97,38 @@ const loginUser = async (payload: ILoginUser) => {
 };
 
 
+
+
+const getMe = async (userId: string) => {
+  if (!userId) {
+    throw new Error("User id is required.");
+  }
+
+  const user = await prisma.user.findUniqueOrThrow({
+    where: {
+      id: userId,
+    },
+    omit: {
+      password: true,
+    },
+  });
+
+  if (!user) {
+    throw new Error("User not found.");
+  }
+
+  if (user.status === "SUSPENDED") {
+    throw new Error("Your account has been suspended.");
+  }
+
+  return user;
+};
+
+
+
+
 export const authService = {
   loginUser,
-registerUserIntoDB
+registerUserIntoDB,
+getMe
 };
