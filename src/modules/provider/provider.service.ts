@@ -72,7 +72,30 @@ const updateGearIntoDB = async (
   providerId: string,
   gearId: string,
   payload: IUpdateGear
-) => {}
+) => {
+  const gear = await prisma.gearItem.findUnique({
+    where: {
+      id: gearId,
+    },
+  });
+
+  if (!gear) {
+    throw new Error("Gear not found");
+  }
+
+  if (gear.providerId !== providerId) {
+    throw new Error("You are not authorized to update this gear");
+  }
+
+  const result = await prisma.gearItem.update({
+    where: {
+      id: gearId,
+    },
+    data: payload,
+  });
+
+  return result;
+};
 
 
 
