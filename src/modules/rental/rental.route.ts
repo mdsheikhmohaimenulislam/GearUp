@@ -10,7 +10,7 @@ const router = Router();
 router.post("/", auth(Role.CUSTOMER), rentalController.createRental);
 
 
-router.get("/");
+// router.get("/");
 // router.get("/:id"); 
 
 export const rentalRouter = router;

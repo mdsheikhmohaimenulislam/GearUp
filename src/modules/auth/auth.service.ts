@@ -4,14 +4,11 @@ import { prisma } from "../../lib/prisma";
 import { jwtUtils } from "../../utils/jwt";
 import { ILoginUser, RegisterPayload } from "./auth.interface";
 
-
-
-
 const registerUserIntoDB = async (payload: RegisterPayload) => {
-  const { name, email, password,phone,address,role } = payload;
+  const { name, email, password, phone, address, role } = payload;
 
   const ifUserExist = await prisma.user.findUnique({
-    where: { email},
+    where: { email },
   });
 
   if (ifUserExist) {
@@ -34,8 +31,6 @@ const registerUserIntoDB = async (payload: RegisterPayload) => {
     },
   });
 
- 
-
   const user = await prisma.user.findUnique({
     where: {
       id: createdUser.id,
@@ -43,17 +38,15 @@ const registerUserIntoDB = async (payload: RegisterPayload) => {
     },
 
     omit: { password: true },
-
   });
 
   return user;
 };
 
-
-
-
 const loginUser = async (payload: ILoginUser) => {
   const { email, password } = payload;
+
+  console.log(payload);
 
   const user = await prisma.user.findUniqueOrThrow({
     where: {
@@ -67,6 +60,8 @@ const loginUser = async (payload: ILoginUser) => {
 
   const isPasswordMatched = await bcrypt.compare(password, user.password);
 
+  console.log(isPasswordMatched);
+
   if (!isPasswordMatched) {
     throw new Error("Invalid email or password.");
   }
@@ -78,26 +73,28 @@ const loginUser = async (payload: ILoginUser) => {
     role: user.role,
   };
 
+  console.log(jwtPayload);
+
   const accessToken = jwtUtils.createToken(
     jwtPayload,
     config.jwt_access_secret,
-    config.jwt_access_expires_in
+    config.jwt_access_expires_in,
   );
 
   const refreshToken = jwtUtils.createToken(
     jwtPayload,
     config.jwt_refresh_secret,
-    config.jwt_refresh_expires_in
+    config.jwt_refresh_expires_in,
   );
+
+  console.log("Access Token:", accessToken);
+  console.log("Refresh Token:", refreshToken);
 
   return {
     accessToken,
     refreshToken,
   };
 };
-
-
-
 
 const getMe = async (userId: string) => {
   if (!userId) {
@@ -124,11 +121,8 @@ const getMe = async (userId: string) => {
   return user;
 };
 
-
-
-
 export const authService = {
   loginUser,
-registerUserIntoDB,
-getMe
+  registerUserIntoDB,
+  getMe,
 };

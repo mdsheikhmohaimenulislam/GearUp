@@ -23,10 +23,11 @@ const registerUser = catchAsync(
 const loginUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;
+    console.log(payload, "mim", req);
 
     const { accessToken, refreshToken } = await authService.loginUser(payload);
 
-    res.cookie("accessToken", accessToken, {
+ res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: false,
       sameSite: "none",
@@ -50,7 +51,7 @@ const loginUser = catchAsync(
 );
 
 
-const getMe = catchAsync(async (req, res) => {
+const getMe = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 
 const id = req.user?.id
 
