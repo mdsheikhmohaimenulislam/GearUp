@@ -1,11 +1,15 @@
 import { Router } from "express";
-
-
+import { gearController } from "./gear.controller";
 
 const router = Router();
 
-router.get("/gear", );
-router.get("/gear/:id", );
-router.get("/categories", );
+// Get all gear with filters
+router.get("/gear", gearController.getAllGear);
 
-export const gearRouter = router
+console.log(gearController);
+
+
+// router.get("/gear/:id");
+// router.get("/categories");
+
+export const gearRouter = router;

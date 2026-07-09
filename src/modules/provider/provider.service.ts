@@ -225,9 +225,19 @@ const deleteGearFromDB = async (
 };
 
 
-const getProviderOrdersIntoDB = async (
-  providerId: string,
-) => {
+const getProviderOrdersFromDB = async (providerId: string) => {
+
+  // Check provider
+  const provider = await prisma.user.findUnique({
+    where: {
+      id: providerId,
+    },
+  });
+
+  if (!provider) {
+    throw new Error("Provider not found.");
+  }
+
 
   const orders = await prisma.order.findMany({
     where: {
@@ -273,5 +283,5 @@ export const providerService = {
   updateGearIntoDB,
   // updateOrderStatusIntoDB,
   deleteGearFromDB,
-  getProviderOrdersIntoDB
+  getProviderOrdersFromDB
 };
