@@ -42,11 +42,11 @@ const updateGear = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// Delete Gear
 const deleteGear = catchAsync(async (req: Request, res: Response) => {
   const providerId = req.user?.id as string;
+  const gearId = req.params.id;
 
-  await providerService.deleteGearFromDB(providerId, req.params.id);
+  await providerService.deleteGearFromDB(providerId, gearId as string);
 
   sendResponse(res, {
     success: true,
@@ -72,30 +72,30 @@ const getProviderOrders = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// Update Order Status
-const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
-  const providerId = req.user?.id as string;
+// const updateOrderStatus = catchAsync(
+//   async (req: Request, res: Response) => {
+//     const providerId = req.user?.id as string;
+//     const orderId = req.params.id;
 
-  const order = await providerService.updateOrderStatusIntoDB(
-    providerId,
-    req.params.id,
-    req.body,
-  );
+//     const order = await providerService.updateOrderStatusIntoDB(
+//       providerId,
+//       orderId as string,
+//       req.body
+//     );
 
-  sendResponse(res, {
-    success: true,
-    statusCode: httpStatus.OK,
-    message: "Order status updated successfully",
-    data: {
-      order,
-    },
-  });
-});
+//     sendResponse(res, {
+//       success: true,
+//       statusCode: httpStatus.OK,
+//       message: "Order status updated successfully",
+//       data: order,
+//     });
+//   }
+// );
 
 export const providerController = {
   createGear,
   updateGear,
   deleteGear,
   getProviderOrders,
-  updateOrderStatus,
+  // updateOrderStatus,
 };

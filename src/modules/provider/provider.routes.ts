@@ -40,11 +40,11 @@ router.get(
 
 
 // Update rental order status
-router.patch(
-  "/orders/:id",
-  auth(Role.PROVIDER),
-  providerController.updateOrderStatus
-);
+// router.patch(
+//   "/orders/:id",
+//   auth(Role.PROVIDER),
+//   providerController.updateOrderStatus
+// );
 
 
 export const providerRoutes = router;

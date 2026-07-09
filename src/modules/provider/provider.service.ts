@@ -99,16 +99,130 @@ const updateGearIntoDB = async (
 
 
 
-const updateOrderStatusIntoDB = async (
-  providerId: string,
-  orderId: string,
-  payload: IUpdateOrderStatus
-) => {}
+// const updateOrderStatusIntoDB = async (
+//   providerId: string,
+//   orderId: string,
+//   payload: IUpdateOrderStatus
+// ) => {
+//   // 1. Order exists check
+//   const order = await prisma.order.findUnique({
+//     where: {
+//       id: orderId,
+//     },
+//     include: {
+//       gear: true,
+//     },
+//   });
+
+//   if (!order) {
+//     throw new Error("Order not found");
+//   }
 
 
-const deletedIntoDB = async (
+//   // 2. Provider authorization check
+//   if (order.gear.providerId !== providerId) {
+//     throw new Error("You are not authorized to update this order");
+//   }
+
+
+//   // 3. Same status check
+//   if (order.status === payload.status) {
+//     throw new Error(
+//       `Order already in ${payload.status} status`
+//     );
+//   }
+
+
+//   // 4. Final status check
+//   if (
+//     order.status === "RETURNED" ||
+//     order.status === "CANCELLED"
+//   ) {
+//     throw new Error(
+//       "Cannot update completed or cancelled order"
+//     );
+//   }
+
+
+//   // 5. Status flow validation
+//   const allowedStatusFlow: Record<string, string[]> = {
+//     PLACED: ["CONFIRMED", "CANCELLED"],
+//     CONFIRMED: ["RENTED", "CANCELLED"],
+//     RENTED: ["RETURNED"],
+//   };
+
+
+//   const nextStatuses = allowedStatusFlow[order.status];
+
+//   if (!nextStatuses?.includes(payload.status)) {
+//     throw new Error(
+//       `Cannot change status from ${order.status} to ${payload.status}`
+//     );
+//   }
+
+
+//   // 6. Update order status
+//   const result = await prisma.order.update({
+//     where: {
+//       id: orderId,
+//     },
+//     data: {
+//       status: payload.status,
+//     },
+//   });
+
+
+//   return result;
+// };
+
+
+const deleteGearFromDB = async (
   providerId: string,
-) => {}
+  gearId: string
+) => {
+  // 1. Gear exists check
+  const gear = await prisma.gearItem.findUnique({
+    where: {
+      id: gearId,
+    },
+  });
+
+  if (!gear) {
+    throw new Error("Gear not found");
+  }
+
+
+  // 2. Provider ownership check
+  if (gear.providerId !== providerId) {
+    throw new Error(
+      "You are not authorized to delete this gear"
+    );
+  }
+
+
+  // 3. Rental/Order check
+  const order = await prisma.order.findFirst({
+    where: {
+      gearId,
+    },
+  });
+
+  if (order) {
+    throw new Error(
+      "Cannot delete gear because it has existing orders"
+    );
+  }
+
+
+  // 4. Delete gear
+  const result = await prisma.gearItem.delete({
+    where: {
+      id: gearId,
+    },
+  });
+
+  return result;
+};
 
 
 const getProviderOrdersIntoDB = async (
@@ -157,7 +271,7 @@ const getProviderOrdersIntoDB = async (
 export const providerService = {
   createGearIntoDB,
   updateGearIntoDB,
-  updateOrderStatusIntoDB,
-  deletedIntoDB,
+  // updateOrderStatusIntoDB,
+  deleteGearFromDB,
   getProviderOrdersIntoDB
 };
