@@ -13,6 +13,6 @@ router.get("/gear/:id", gearController.getSingleGear);
 
 
 
-// router.get("/categories");
+router.get("/categories", gearController.getAllCategories);
 
 export const gearRouter = router;

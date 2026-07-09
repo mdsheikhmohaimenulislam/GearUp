@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status";
-import { gearService } from "./gear.service";
+import { CategoryServices, gearService } from "./gear.service";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 
@@ -46,8 +46,23 @@ const getSingleGear = catchAsync(
 );
 
 
+const getAllCategories = catchAsync(
+  async (req: Request, res: Response) => {
+
+    const categories = await gearService.getAllCategoriesFromDB();
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Categories fetched successfully",
+      data: categories,
+    });
+
+  }
+);
 
 export const gearController = {
   getAllGear,
   getSingleGear,
+  getAllCategories
 };

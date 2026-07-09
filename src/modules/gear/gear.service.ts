@@ -112,7 +112,33 @@ const getSingleGearFromDB = async (id: string) => {
 };
 
 
+
+
+
+const getAllCategoriesFromDB = async () => {
+  const categories = await prisma.category.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+    },
+  });
+
+  return categories;
+};
+
+
+export const CategoryServices = {
+  getAllCategoriesFromDB,
+};
+
+
 export const gearService = {
   getAllGearFromDB,
-  getSingleGearFromDB
+  getSingleGearFromDB,
+  getAllCategoriesFromDB
 };
