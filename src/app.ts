@@ -8,7 +8,7 @@ import { globalErrorHandling } from "./middleWares/globalErrorHandler";
 import { providerRoutes } from "./modules/provider/provider.routes";
 import { categoryRouter } from "./modules/category/category.route";
 import { gearRouter } from "./modules/gear/gear.routes";
-
+import { rentalRouter } from "./modules/rental/rental.route";
 
 const app: Application = express();
 
@@ -19,10 +19,6 @@ app.use(
   }),
 );
 
-
-
-
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -31,17 +27,21 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
-
-
 app.use("/api/auth", authRouter);
-app.use("/api/provider", providerRoutes)
-app.use("/api/categories", categoryRouter)
-app.use("/api", gearRouter)
+app.use("/api/provider", providerRoutes);
+app.use("/api/categories", categoryRouter);
+app.use("/api", gearRouter);
+app.use("/api/rentals", rentalRouter);
+
+
+
+
+
+
 
 
 app.use(notFound);
 
 app.use(globalErrorHandling);
-
 
 export default app;
