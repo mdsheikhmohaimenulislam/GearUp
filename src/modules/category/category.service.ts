@@ -44,7 +44,6 @@ const createCategoryIntoDB = async (payload: ICreateCategory) => {
 };
 
 const updateCategoryIntoDB = async (id: string, payload: IUpdateCategory) => {
-
   console.log(payload);
   // Category exists check
   const isCategoryExists = await prisma.category.findUnique({
@@ -80,11 +79,25 @@ const updateCategoryIntoDB = async (id: string, payload: IUpdateCategory) => {
   return result;
 };
 
-const deleteCategory = async () => {};
+const deleteCategoryFromDB = async (id: string) => {
+  const isCategoryExists = await prisma.category.findUnique({
+    where: { id },
+  });
+
+  if (!isCategoryExists) {
+    throw new Error("Category not found");
+  }
+
+  await prisma.category.delete({
+    where: { id },
+  });
+
+  return null;
+};
 
 export const categoryService = {
   getAllCategoriesFromDB,
   createCategoryIntoDB,
   updateCategoryIntoDB,
-  deleteCategory,
+  deleteCategoryFromDB,
 };
