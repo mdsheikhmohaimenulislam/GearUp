@@ -8,14 +8,14 @@ const router = Router();
 
 // Public - Get all categories
 router.get(
-  "/categories",
+  "/",
   categoryController.getAllCategories
 );
 
 
 // Admin - Create category
 router.post(
-  "/categories",
+  "/",
   auth(Role.ADMIN),
   categoryController.createCategory
 );

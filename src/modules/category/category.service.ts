@@ -1,27 +1,20 @@
 import { prisma } from "../../lib/prisma";
-import { ICreateCategory } from "./category.interface";
+import { ICreateCategory, IUpdateCategory } from "./category.interface";
+import httpStatus from "http-status";
 
 const getAllCategoriesFromDB = async () => {
-
   const categories = await prisma.category.findMany({
-    orderBy:{
-      createdAt:"desc"
-    }
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
   return categories;
 };
-const createCategoryIntoDB = async (
-  payload: ICreateCategory
-) => {
-
+const createCategoryIntoDB = async (payload: ICreateCategory) => {
   const { name } = payload;
 
-  const slug = name
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-");
-
+  const slug = name.toLowerCase().trim().replace(/\s+/g, "-");
 
   const existingCategory = await prisma.category.findFirst({
     where: {
@@ -36,11 +29,9 @@ const createCategoryIntoDB = async (
     },
   });
 
-
   if (existingCategory) {
     throw new Error("Category already exists");
   }
-
 
   const category = await prisma.category.create({
     data: {
@@ -49,21 +40,51 @@ const createCategoryIntoDB = async (
     },
   });
 
-
   return category;
 };
 
-const updateCategory = async () =>{}
+const updateCategoryIntoDB = async (id: string, payload: IUpdateCategory) => {
 
-const deleteCategory = async () =>{}
+  console.log(payload);
+  // Category exists check
+  const isCategoryExists = await prisma.category.findUnique({
+    where: { id },
+  });
 
+  if (!isCategoryExists) {
+    throw new Error("Category not found");
+  }
 
+  // Duplicate name check
+  if (payload.name) {
+    const isNameExists = await prisma.category.findFirst({
+      where: {
+        name: payload.name,
+        NOT: {
+          id,
+        },
+      },
+    });
 
+    if (isNameExists) {
+      throw new Error("Category already exists");
+    }
+  }
 
+  // Update
+  const result = await prisma.category.update({
+    where: { id },
+    data: payload,
+  });
+
+  return result;
+};
+
+const deleteCategory = async () => {};
 
 export const categoryService = {
-    getAllCategoriesFromDB,
-    createCategoryIntoDB,
-    updateCategory,
-    deleteCategory
-}
+  getAllCategoriesFromDB,
+  createCategoryIntoDB,
+  updateCategoryIntoDB,
+  deleteCategory,
+};

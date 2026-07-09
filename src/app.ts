@@ -34,7 +34,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/provider", providerRoutes)
-app.use("/api", categoryRouter)
+app.use("/api/categories", categoryRouter)
 
 
 app.use(notFound);
