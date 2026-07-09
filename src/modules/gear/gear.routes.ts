@@ -6,10 +6,13 @@ const router = Router();
 // Get all gear with filters
 router.get("/gear", gearController.getAllGear);
 
-console.log(gearController);
 
 
-// router.get("/gear/:id");
+
+router.get("/gear/:id", gearController.getSingleGear);
+
+
+
 // router.get("/categories");
 
 export const gearRouter = router;

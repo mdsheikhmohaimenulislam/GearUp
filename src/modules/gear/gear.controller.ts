@@ -23,6 +23,31 @@ const getAllGear = catchAsync(
 );
 
 
+
+const getSingleGear = catchAsync(
+  async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+
+    const { id } = req.params;
+
+    const gear = await gearService.getSingleGearFromDB(id as string);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Gear details fetched successfully",
+      data: gear,
+    });
+
+  }
+);
+
+
+
 export const gearController = {
   getAllGear,
+  getSingleGear,
 };

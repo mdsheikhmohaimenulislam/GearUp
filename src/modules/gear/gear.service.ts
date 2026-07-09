@@ -76,6 +76,43 @@ where: {
 };
 
 
+
+const getSingleGearFromDB = async (id: string) => {
+  const gear = await prisma.gearItem.findUnique({
+    where: {
+      id,
+    },
+
+    include: {
+      category: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+        },
+      },
+
+      provider: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+    },
+  });
+
+
+  if (!gear) {
+    throw new Error("Gear not found");
+  }
+
+
+  return gear;
+};
+
+
 export const gearService = {
-  getAllGearFromDB
+  getAllGearFromDB,
+  getSingleGearFromDB
 };
