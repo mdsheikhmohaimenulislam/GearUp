@@ -23,7 +23,7 @@ export const auth = (...requiredRoles: Role[]) => {
 
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 
-    console.log(req.cookies.accessToken);
+
 
     const token = req.cookies.accessToken
       ? req.cookies.accessToken

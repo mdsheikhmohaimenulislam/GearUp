@@ -46,7 +46,7 @@ const registerUserIntoDB = async (payload: RegisterPayload) => {
 const loginUser = async (payload: ILoginUser) => {
   const { email, password } = payload;
 
-  console.log(payload);
+
 
   const user = await prisma.user.findUniqueOrThrow({
     where: {
@@ -60,7 +60,7 @@ const loginUser = async (payload: ILoginUser) => {
 
   const isPasswordMatched = await bcrypt.compare(password, user.password);
 
-  console.log(isPasswordMatched);
+
 
   if (!isPasswordMatched) {
     throw new Error("Invalid email or password.");
@@ -73,7 +73,7 @@ const loginUser = async (payload: ILoginUser) => {
     role: user.role,
   };
 
-  console.log(jwtPayload);
+
 
   const accessToken = jwtUtils.createToken(
     jwtPayload,
@@ -87,8 +87,7 @@ const loginUser = async (payload: ILoginUser) => {
     config.jwt_refresh_expires_in,
   );
 
-  console.log("Access Token:", accessToken);
-  console.log("Refresh Token:", refreshToken);
+
 
   return {
     accessToken,
