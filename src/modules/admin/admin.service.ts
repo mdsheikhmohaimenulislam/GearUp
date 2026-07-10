@@ -1,4 +1,5 @@
 import { prisma } from "../../lib/prisma";
+import { IUpdateUserStatus } from "./admin.interface";
 
 const getAllUsersFromDB = async () => {
 
@@ -28,6 +29,53 @@ const getAllUsersFromDB = async () => {
 };
 
 
+const updateUserStatusIntoDB = async (
+  userId: string,
+  payload: IUpdateUserStatus
+) => {
+
+  const { status } = payload;
+
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+
+  const updatedUser =
+    await prisma.user.update({
+
+      where: {
+        id: userId,
+      },
+
+      data: {
+        status,
+      },
+
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        status: true,
+      },
+
+    });
+
+
+  return updatedUser;
+
+};
+
 export const adminService = {
 getAllUsersFromDB,
+updateUserStatusIntoDB
 }

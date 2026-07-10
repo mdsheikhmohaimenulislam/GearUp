@@ -15,7 +15,12 @@ router.get(
   auth(Role.ADMIN),
   adminController.getAllUsers
 );
-// router.patch("/users/:id", updateUserStatus);
+router.patch(
+  "/users/:id",
+  auth(Role.ADMIN),
+  adminController.updateUserStatus
+);
+
 // router.get("/gear", getAllGearAdmin);
 // router.get("/rentals", getAllRentals);
 
