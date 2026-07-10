@@ -2,9 +2,7 @@ import { prisma } from "../../lib/prisma";
 import { IUpdateUserStatus } from "./admin.interface";
 
 const getAllUsersFromDB = async () => {
-
   const users = await prisma.user.findMany({
-
     select: {
       id: true,
       name: true,
@@ -20,22 +18,16 @@ const getAllUsersFromDB = async () => {
     orderBy: {
       createdAt: "desc",
     },
-
   });
 
-
   return users;
-
 };
-
 
 const updateUserStatusIntoDB = async (
   userId: string,
-  payload: IUpdateUserStatus
+  payload: IUpdateUserStatus,
 ) => {
-
   const { status } = payload;
-
 
   const user = await prisma.user.findUnique({
     where: {
@@ -43,45 +35,34 @@ const updateUserStatusIntoDB = async (
     },
   });
 
-
   if (!user) {
     throw new Error("User not found");
   }
 
+  const updatedUser = await prisma.user.update({
+    where: {
+      id: userId,
+    },
 
-  const updatedUser =
-    await prisma.user.update({
+    data: {
+      status,
+    },
 
-      where: {
-        id: userId,
-      },
-
-      data: {
-        status,
-      },
-
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        status: true,
-      },
-
-    });
-
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      status: true,
+    },
+  });
 
   return updatedUser;
-
 };
 
-
 const getAllGearFromDB = async () => {
-
   const gears = await prisma.gearItem.findMany({
-
     include: {
-
       category: true,
 
       provider: {
@@ -91,22 +72,49 @@ const getAllGearFromDB = async () => {
           email: true,
         },
       },
-
     },
 
     orderBy: {
       createdAt: "desc",
     },
-
   });
 
   return gears;
-
 };
 
+const getAllRentalsFromDB = async () => {
+  const rentals = await prisma.order.findMany({
+    include: {
+      customer: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+
+      gear: {
+        select: {
+          id: true,
+          title: true,
+          brand: true,
+        },
+      },
+
+      payment: true,
+    },
+
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return rentals;
+};
 
 export const adminService = {
-getAllUsersFromDB,
-updateUserStatusIntoDB,
-getAllGearFromDB
-}
+  getAllUsersFromDB,
+  updateUserStatusIntoDB,
+  getAllGearFromDB,
+  getAllRentalsFromDB,
+};

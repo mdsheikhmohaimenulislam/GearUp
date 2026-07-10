@@ -3,29 +3,12 @@ import { auth } from "../../middleWares/auth";
 import { Role } from "../../../generated/prisma/enums";
 import { adminController } from "./admin.controller";
 
-
-
-
 const router = Router();
 
+router.get("/users", auth(Role.ADMIN), adminController.getAllUsers);
+router.patch("/users/:id", auth(Role.ADMIN), adminController.updateUserStatus);
 
+router.get("/gear", auth(Role.ADMIN), adminController.getAllGear);
+router.get("/rentals", auth(Role.ADMIN), adminController.getAllRentals);
 
-router.get(
-  "/users",
-  auth(Role.ADMIN),
-  adminController.getAllUsers
-);
-router.patch(
-  "/users/:id",
-  auth(Role.ADMIN),
-  adminController.updateUserStatus
-);
-
-router.get(
-  "/gear",
-  auth(Role.ADMIN),
-  adminController.getAllGear
-);
-// router.get("/rentals", getAllRentals);
-
-export const adminRouter = router
+export const adminRouter = router;
