@@ -98,82 +98,62 @@ const updateGearIntoDB = async (
 };
 
 
+const updateOrderStatusIntoDB = async (
+  providerId: string,
+  orderId: string,
+  payload: IUpdateOrderStatus
+) => {
 
-// const updateOrderStatusIntoDB = async (
-//   providerId: string,
-//   orderId: string,
-//   payload: IUpdateOrderStatus
-// ) => {
-//   // 1. Order exists check
-//   const order = await prisma.order.findUnique({
-//     where: {
-//       id: orderId,
-//     },
-//     include: {
-//       gear: true,
-//     },
-//   });
-
-//   if (!order) {
-//     throw new Error("Order not found");
-//   }
+  const { status } = payload;
 
 
-//   // 2. Provider authorization check
-//   if (order.gear.providerId !== providerId) {
-//     throw new Error("You are not authorized to update this order");
-//   }
+  // Check order belongs to provider
+  const order = await prisma.order.findFirst({
+    where: {
+      id: orderId,
+      gear: {
+        providerId,
+      },
+    },
+  });
 
 
-//   // 3. Same status check
-//   if (order.status === payload.status) {
-//     throw new Error(
-//       `Order already in ${payload.status} status`
-//     );
-//   }
+  if (!order) {
+    throw new Error(
+      "Order not found or you are not authorized"
+    );
+  }
 
 
-//   // 4. Final status check
-//   if (
-//     order.status === "RETURNED" ||
-//     order.status === "CANCELLED"
-//   ) {
-//     throw new Error(
-//       "Cannot update completed or cancelled order"
-//     );
-//   }
+  // Status validation
+  if (
+    order.status === "RETURNED" ||
+    order.status === "CANCELLED"
+  ) {
+    throw new Error(
+      "Order status cannot be updated"
+    );
+  }
 
 
-//   // 5. Status flow validation
-//   const allowedStatusFlow: Record<string, string[]> = {
-//     PLACED: ["CONFIRMED", "CANCELLED"],
-//     CONFIRMED: ["RENTED", "CANCELLED"],
-//     RENTED: ["RETURNED"],
-//   };
+  const updatedOrder =
+    await prisma.order.update({
+
+      where: {
+        id: orderId,
+      },
+
+      data: {
+        status,
+      },
+
+    });
 
 
-//   const nextStatuses = allowedStatusFlow[order.status];
+  return updatedOrder;
 
-//   if (!nextStatuses?.includes(payload.status)) {
-//     throw new Error(
-//       `Cannot change status from ${order.status} to ${payload.status}`
-//     );
-//   }
+};
 
-
-//   // 6. Update order status
-//   const result = await prisma.order.update({
-//     where: {
-//       id: orderId,
-//     },
-//     data: {
-//       status: payload.status,
-//     },
-//   });
-
-
-//   return result;
-// };
 
 
 const deleteGearFromDB = async (
@@ -281,7 +261,7 @@ const getProviderOrdersFromDB = async (providerId: string) => {
 export const providerService = {
   createGearIntoDB,
   updateGearIntoDB,
-  // updateOrderStatusIntoDB,
+updateOrderStatusIntoDB,
   deleteGearFromDB,
   getProviderOrdersFromDB
 };

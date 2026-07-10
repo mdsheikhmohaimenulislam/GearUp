@@ -72,30 +72,34 @@ const getProviderOrders = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// const updateOrderStatus = catchAsync(
-//   async (req: Request, res: Response) => {
-//     const providerId = req.user?.id as string;
-//     const orderId = req.params.id;
+const updateOrderStatus = catchAsync(
+  async (req: Request, res: Response) => {
 
-//     const order = await providerService.updateOrderStatusIntoDB(
-//       providerId,
-//       orderId as string,
-//       req.body
-//     );
+    const providerId = req.user?.id as string;
 
-//     sendResponse(res, {
-//       success: true,
-//       statusCode: httpStatus.OK,
-//       message: "Order status updated successfully",
-//       data: order,
-//     });
-//   }
-// );
+    const orderId = req.params.id;
+
+    const result =
+      await providerService.updateOrderStatusIntoDB(
+        providerId,
+        orderId as string,
+        req.body
+      );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Order status updated successfully",
+      data: result,
+    });
+
+  }
+);
 
 export const providerController = {
   createGear,
   updateGear,
   deleteGear,
   getProviderOrders,
-  // updateOrderStatus,
+ updateOrderStatus
 };
