@@ -188,7 +188,56 @@ const confirmPaymentIntoDB = async (
   return updatedPayment;
 };
 
+
+const getMyPaymentsFromDB = async (
+  customerId: string
+) => {
+
+  const payments = await prisma.payment.findMany({
+
+    where: {
+
+      rentalOrder: {
+        customerId,
+      },
+
+    },
+
+    include: {
+
+      rentalOrder: {
+        select: {
+          id: true,
+          quantity: true,
+          startDate: true,
+          endDate: true,
+          status: true,
+
+          gear: {
+            select: {
+              id: true,
+              title: true,
+              brand: true,
+            },
+          },
+
+        },
+      },
+
+    },
+
+    orderBy: {
+      createdAt: "desc",
+    },
+
+  });
+
+  return payments;
+
+};
+
 export const paymentService = {
   createCheckoutSession,
   confirmPaymentIntoDB,
+  getMyPaymentsFromDB,
 };
