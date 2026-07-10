@@ -188,23 +188,15 @@ const confirmPaymentIntoDB = async (
   return updatedPayment;
 };
 
-
-const getMyPaymentsFromDB = async (
-  customerId: string
-) => {
-
+const getMyPaymentsFromDB = async (customerId: string) => {
   const payments = await prisma.payment.findMany({
-
     where: {
-
       rentalOrder: {
         customerId,
       },
-
     },
 
     include: {
-
       rentalOrder: {
         select: {
           id: true,
@@ -220,24 +212,57 @@ const getMyPaymentsFromDB = async (
               brand: true,
             },
           },
-
         },
       },
-
     },
 
     orderBy: {
       createdAt: "desc",
     },
-
   });
 
   return payments;
+};
 
+const getPaymentDetailsFromDB = async (
+  customerId: string,
+  paymentId: string
+) => {
+
+  if (!paymentId) {
+    throw new Error("Payment id is required");
+  }
+
+  const payment = await prisma.payment.findFirstOrThrow({
+    where: {
+      id: paymentId,
+      rentalOrder: {
+        customerId,
+      },
+    },
+    include: {
+      rentalOrder: {
+        include: {
+          gear: {
+            select: {
+              id: true,
+              title: true,
+              brand: true,
+              pricePerDay: true,
+              images: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return payment;
 };
 
 export const paymentService = {
   createCheckoutSession,
   confirmPaymentIntoDB,
   getMyPaymentsFromDB,
+  getPaymentDetailsFromDB,
 };

@@ -20,6 +20,10 @@ router.get(
   paymentController.getMyPayments
 );
 
-// router.get("/:id",);
+router.get(
+  "/:id",
+  auth(Role.CUSTOMER),
+  paymentController.getPaymentDetails
+);
 
 export const paymentRouter = router;
