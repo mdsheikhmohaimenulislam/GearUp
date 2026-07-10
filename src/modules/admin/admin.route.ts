@@ -21,7 +21,11 @@ router.patch(
   adminController.updateUserStatus
 );
 
-// router.get("/gear", getAllGearAdmin);
+router.get(
+  "/gear",
+  auth(Role.ADMIN),
+  adminController.getAllGear
+);
 // router.get("/rentals", getAllRentals);
 
 export const adminRouter = router

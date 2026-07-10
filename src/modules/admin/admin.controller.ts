@@ -45,7 +45,24 @@ const updateUserStatus = catchAsync(
   }
 );
 
+const getAllGear = catchAsync(
+  async (req: Request, res: Response) => {
+
+    const result = await adminService.getAllGearFromDB();
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Gear listings fetched successfully",
+      data: result,
+    });
+
+  }
+);
+
+
 export const adminController = {
     getAllUsers,
     updateUserStatus,
+    getAllGear,
 }
