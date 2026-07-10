@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import config from "../../config";
+import config from "../../config/index.js";
 import { prisma } from "../../lib/prisma";
 import { jwtUtils } from "../../utils/jwt";
 import { ILoginUser, RegisterPayload } from "./auth.interface";
@@ -46,8 +46,6 @@ const registerUserIntoDB = async (payload: RegisterPayload) => {
 const loginUser = async (payload: ILoginUser) => {
   const { email, password } = payload;
 
-
-
   const user = await prisma.user.findUniqueOrThrow({
     where: {
       email,
@@ -60,8 +58,6 @@ const loginUser = async (payload: ILoginUser) => {
 
   const isPasswordMatched = await bcrypt.compare(password, user.password);
 
-
-
   if (!isPasswordMatched) {
     throw new Error("Invalid email or password.");
   }
@@ -72,8 +68,6 @@ const loginUser = async (payload: ILoginUser) => {
     email: user.email,
     role: user.role,
   };
-
-
 
   const accessToken = jwtUtils.createToken(
     jwtPayload,
@@ -86,8 +80,6 @@ const loginUser = async (payload: ILoginUser) => {
     config.jwt_refresh_secret,
     config.jwt_refresh_expires_in,
   );
-
-
 
   return {
     accessToken,

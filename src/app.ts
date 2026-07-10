@@ -1,6 +1,6 @@
 import cookieParser from "cookie-parser";
 import express, { Application, Request, Response } from "express";
-import config from "./config";
+import config from "./config/index.js";
 import cors from "cors";
 import { authRouter } from "./modules/auth/auth.route";
 import { notFound } from "./middleWares/notFound";
@@ -26,7 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/api", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
 

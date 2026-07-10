@@ -2,7 +2,7 @@ import crypto from "crypto";
 import { prisma } from "../../lib/prisma";
 
 import { IConfirmPayment, ICreatePayment } from "./payment.interface";
-import config from "../../config";
+import config from "../../config/index.js";
 import { stripe } from "../../lib/stripe";
 
 const createCheckoutSession = async (
@@ -226,9 +226,8 @@ const getMyPaymentsFromDB = async (customerId: string) => {
 
 const getPaymentDetailsFromDB = async (
   customerId: string,
-  paymentId: string
+  paymentId: string,
 ) => {
-
   if (!paymentId) {
     throw new Error("Payment id is required");
   }
