@@ -12,7 +12,7 @@ export interface ICreateProvider {
 }
 
 
-// Update Gear
+
 export interface IUpdateGear {
   title?: string;
   description?: string;
@@ -25,7 +25,7 @@ export interface IUpdateGear {
 }
 
 
-// Update Order Status
+
 export interface IUpdateOrderStatus {
   status: OrderStatus;
 }

@@ -7,7 +7,7 @@ const createRentalIntoDB = async (
 ) => {
   const { gearId, quantity, startDate, endDate } = payload;
 
-  // Check gear exists
+
   const gear = await prisma.gearItem.findUniqueOrThrow({
     where: {
       id: gearId,
@@ -18,7 +18,7 @@ const createRentalIntoDB = async (
     throw new Error("Gear not found");
   }
 
-  // Check available quantity
+
   if (gear.quantityAvailable < quantity) {
     throw new Error("Gear is not available");
   }
@@ -26,19 +26,19 @@ const createRentalIntoDB = async (
   const start = new Date(startDate);
   const end = new Date(endDate);
 
-  // Date validation
+
   if (start >= end) {
     throw new Error("Invalid rental date");
   }
 
-  // Calculate rental days
+
   const rentalDays = Math.ceil(
     (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24),
   );
 
   const totalPrice = Number(gear.pricePerDay) * quantity * rentalDays;
 
-  // Create Order
+
   const order = await prisma.order.create({
     data: {
       customerId,
@@ -50,7 +50,7 @@ const createRentalIntoDB = async (
     },
   });
 
-  // Update available quantity
+
   await prisma.gearItem.update({
     where: {
       id: gearId,

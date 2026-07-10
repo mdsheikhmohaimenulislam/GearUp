@@ -4,7 +4,7 @@ import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import { providerService } from "./provider.service";
 
-// Add Gear
+
 const createGear = catchAsync(async (req: Request, res: Response) => {
   const providerId = req.user?.id as string;
 
@@ -22,7 +22,6 @@ const createGear = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// Update Gear
 const updateGear = catchAsync(async (req: Request, res: Response) => {
   const providerId = req.user?.id as string;
 
@@ -56,7 +55,7 @@ const deleteGear = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// Get Provider Orders
+
 const getProviderOrders = catchAsync(async (req: Request, res: Response) => {
   const providerId = req.user?.id as string;
 

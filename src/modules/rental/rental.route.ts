@@ -13,4 +13,4 @@ router.get("/:id", auth(Role.CUSTOMER), rentalController.getSingleRental);
 
 export const rentalRouter = router;
 
-// 686f4f77-3299-4d14-90a0-291b1d4a0618
+

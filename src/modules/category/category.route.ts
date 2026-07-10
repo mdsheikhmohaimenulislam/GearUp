@@ -6,14 +6,14 @@ import { categoryController } from "./category.controller";
 const router = Router();
 
 
-// Public - Get all categories
+
 router.get(
   "/",
   categoryController.getAllCategories
 );
 
 
-// Admin - Create category
+
 router.post(
   "/",
   auth(Role.ADMIN),
@@ -21,7 +21,7 @@ router.post(
 );
 
 
-// Admin - Update category
+
 router.patch(
   "/:id",
   auth(Role.ADMIN),
@@ -29,7 +29,7 @@ router.patch(
 );
 
 
-// Admin - Delete category
+
 router.delete(
   "/:id",
   auth(Role.ADMIN),

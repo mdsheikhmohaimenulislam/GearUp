@@ -1,6 +1,6 @@
 import { prisma } from "../../lib/prisma";
 import { ICreateCategory, IUpdateCategory } from "./category.interface";
-import httpStatus from "http-status";
+
 
 const getAllCategoriesFromDB = async () => {
   const categories = await prisma.category.findMany({
@@ -44,8 +44,6 @@ const createCategoryIntoDB = async (payload: ICreateCategory) => {
 };
 
 const updateCategoryIntoDB = async (id: string, payload: IUpdateCategory) => {
-  console.log(payload);
-  // Category exists check
   const isCategoryExists = await prisma.category.findUnique({
     where: { id },
   });
@@ -54,7 +52,6 @@ const updateCategoryIntoDB = async (id: string, payload: IUpdateCategory) => {
     throw new Error("Category not found");
   }
 
-  // Duplicate name check
   if (payload.name) {
     const isNameExists = await prisma.category.findFirst({
       where: {
@@ -70,7 +67,6 @@ const updateCategoryIntoDB = async (id: string, payload: IUpdateCategory) => {
     }
   }
 
-  // Update
   const result = await prisma.category.update({
     where: { id },
     data: payload,

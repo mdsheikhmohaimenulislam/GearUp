@@ -7,7 +7,7 @@ import { auth } from "../../middleWares/auth";
 const router = Router();
 
 
-// Add gear to inventory
+
 router.post(
   "/gear",
   auth(Role.PROVIDER),
@@ -15,7 +15,7 @@ router.post(
 );
 
 
-// Update gear listing
+
 router.put(
   "/gear/:id",
   auth(Role.PROVIDER),
@@ -23,7 +23,7 @@ router.put(
 );
 
 
-// Remove gear listing
+
 router.delete(
   "/gear/:id",
   auth(Role.PROVIDER),
@@ -31,7 +31,7 @@ router.delete(
 );
 
 
-// Get incoming rental orders
+
 router.get(
   "/orders",
   auth(Role.PROVIDER),
@@ -39,7 +39,7 @@ router.get(
 );
 
 
-// Update rental order status
+
 router.patch(
   "/orders/:id",
   auth(Role.PROVIDER),

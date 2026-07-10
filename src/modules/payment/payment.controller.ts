@@ -38,53 +38,39 @@ const confirmPayment = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getMyPayments = catchAsync(async (req: Request, res: Response) => {
+  const customerId = req.user?.id as string;
 
-const getMyPayments = catchAsync(
-  async (req: Request, res: Response) => {
+  const result = await paymentService.getMyPaymentsFromDB(customerId);
 
-    const customerId = req.user?.id as string;
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Payment history retrieved successfully",
+    data: result,
+  });
+});
 
-    const result =
-      await paymentService.getMyPaymentsFromDB(
-        customerId
-      );
+const getPaymentDetails = catchAsync(async (req: Request, res: Response) => {
+  const customerId = req.user?.id as string;
+  const paymentId = req.params.id;
 
-    sendResponse(res, {
-      success: true,
-      statusCode: httpStatus.OK,
-      message: "Payment history retrieved successfully",
-      data: result,
-    });
+  const result = await paymentService.getPaymentDetailsFromDB(
+    customerId,
+    paymentId as string,
+  );
 
-  }
-);
-
-
-const getPaymentDetails = catchAsync(
-  async (req: Request, res: Response) => {
-
-    const customerId = req.user?.id as string;
-    const paymentId = req.params.id;
-
-    const result = await paymentService.getPaymentDetailsFromDB(
-      customerId,
-      paymentId
-    );
-
-    sendResponse(res, {
-      success: true,
-      statusCode: httpStatus.OK,
-      message: "Payment details retrieved successfully",
-      data: result,
-    });
-
-  }
-);
-
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Payment details retrieved successfully",
+    data: result,
+  });
+});
 
 export const paymentController = {
   createPayment,
   confirmPayment,
   getMyPayments,
-  getPaymentDetails
+  getPaymentDetails,
 };

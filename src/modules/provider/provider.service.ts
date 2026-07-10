@@ -107,7 +107,7 @@ const updateOrderStatusIntoDB = async (
   const { status } = payload;
 
 
-  // Check order belongs to provider
+
   const order = await prisma.order.findFirst({
     where: {
       id: orderId,
@@ -125,7 +125,6 @@ const updateOrderStatusIntoDB = async (
   }
 
 
-  // Status validation
   if (
     order.status === "RETURNED" ||
     order.status === "CANCELLED"
